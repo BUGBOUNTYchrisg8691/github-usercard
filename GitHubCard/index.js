@@ -4,6 +4,12 @@
     https://api.github.com/users/<your name>
 */
 
+axios.get("https://api.github.com/users/bugbountychrisg8691").then(resp => {
+    console.log(resp)
+}).catch(err => {
+    console.log("Error: ", err)
+})
+
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -12,10 +18,81 @@
     Skip to STEP 3.
 */
 
+/* <div class="card">
+    <img src="" alt="">
+    <div class="content">
+        <h2 class="name"></h2>
+        <h3 class="username"></h3>
+        <p></p>
+        <p>
+            <a href=""></a>
+        </p>
+        <p></p>
+        <p></p>
+        <p></p>
+    </div>
+</div> */
+
+let cardMaker = (data) => {
+    const card = document.createElement("div")
+    const content = document.createElement("div")
+    const image = document.createElement("img")
+    const name = document.createElement("h2")
+    const username = document.createElement("h3")
+    const location = document.createElement("p")
+    const profile = document.createElement("p")
+    const followers = document.createElement("p")
+    const following = document.createElement("p")
+    const bio = document.createElement("p")
+    const anchor = document.createElement("a")
+
+    card.classList.add("card")
+    content.classList.add("content")
+    name.classList.add("name")
+    username.classList.add("username")
+
+    image.src = data.avatar_url
+    name.textContent = data.name
+    username.textContent = data.login
+    location.textContent = `Location: ${data.location}`
+    profile.textContent = 'Profile: '
+    followers.textContent = `Followers: ${data.followers}`
+    following.textContent = `Following: ${data.following}`
+    bio.textContent = `Bio: ${data.bio}`
+    anchor.href = data.html_url
+    anchor.textContent = data.html_url
+
+    profile.appendChild(anchor)
+
+    content.appendChild(name)
+    content.appendChild(username)
+    content.appendChild(location)
+    content.appendChild(profile)
+    content.appendChild(followers)
+    content.appendChild(following)
+    content.appendChild(bio)
+
+    card.appendChild(image)
+    card.appendChild(content)
+
+    return card
+}
+
+
+
 /*
   STEP 4: Pass the data received from Github into your function,
     and append the returned markup to the DOM as a child of .cards
 */
+
+const cards = document.querySelector(".cards")
+axios.get("https://api.github.com/users/bugbountychrisg8691").then(resp => {
+    cards.appendChild(cardMaker(resp.data))
+}).catch(err => {
+    console.log(`Error: ${err}`)
+})
+
+
 
 /*
   STEP 5: Now that you have your own card getting added to the DOM, either
